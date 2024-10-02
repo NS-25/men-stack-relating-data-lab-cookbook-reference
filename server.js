@@ -34,9 +34,10 @@ app.use(
   })
 );
 
+app.use(passUserToView);
+
 app.get('/', (req, res) => {
   res.render('index.ejs', {
-    user: req.session.user,
   });
 });
 
@@ -53,7 +54,6 @@ app.get('/vip-lounge', (req, res) => {
 // below middleware
 // server.js
 
-app.use(passUserToView);
 app.use('/auth', authController);
 app.use(isSignedIn);
 app.use('/recipes', recipesController);
@@ -61,6 +61,8 @@ app.use('/ingredients', ingredientsController);
 
 
 mongoose.connection.on("connected", () => {
+  console.clear();
+
   console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
   app.listen(port, () => {
     console.log(`The express app is ready on port ${port}!`);
